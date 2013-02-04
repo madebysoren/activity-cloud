@@ -11,27 +11,19 @@
             <li>Microsoft.AspNet.SignalR.Js - Javascript client for SignalR</li>
             <li>Microsoft.AspNet.SignalR.Client - .NET client for SignalR (includes WinRT, Windows Phone 8 and Silverlight5 clients)</li>
         </ul>
-        Then the code is dead simple. First you connect to Activity Cloud, and then you start the connection. If connection is obtained you set up a handler for receiving data.
+        Then the code is dead simple. First you connect to Activity Cloud, then you set up a handler for receiving data and finally you start the connection.
         Here shown in .NET:
         <p style="background: #fff; margin: auto auto; padding: 5px; width: 80%;">
             <code style="font-weight: bold;">
                 Connection connection = new Connection("@(Request.Url.Scheme + "://" + Request.Url.Host)/Api/Connect");<br />
                 Guid connectionId;
                 <br /><br />
-                connection.Start().ContinueWith(task => {<br />
-                &nbsp;&nbsp;if (task.IsFaulted) {<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;Failed();<br />
-                &nbsp;&nbsp;} else {<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;connectionId = connection.ConnectionId;<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;connection.Received += data => {<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HandleReceivedData(data);<br />
-                &nbsp;&nbsp;&nbsp;&nbsp;};<br />
-                &nbsp;&nbsp;}<br />
-                });
+                _connection.Received += SignalRecieved;<br />
+                _connection.Start().Wait();
             </code>
         </p>
         It's as simple as that. We are now connected to Activity Cloud through a persistant connection, thus being able to receive events from Activity Cloud. Through the
-        <code>HandleReceivedData</code> method, you can handle the events send from Activity Cloud. Read more about event handling @Html.ActionLink("here", "Events").
+        <code>SignalReceived</code> method, you can handle the events send from Activity Cloud. Read more about event handling @Html.ActionLink("here", "Events").
     </hgroup>
     <hgroup>
         <h3>Authentication</h3>
